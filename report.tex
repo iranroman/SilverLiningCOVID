@@ -1,0 +1,41 @@
+\title{COVID-19 Silver Linings SOTA Sentiment Analysis}
+\author{
+	Iran R. Roman
+}
+\date{\today}
+
+\documentclass[12pt]{article}
+
+\begin{document}
+\maketitle
+
+\section{Motivation}
+Given the free responses of individuals and the ratings (positive or negative)
+assigned by a human, we want to assess the agreement between human ratings and the 
+ratings by a state-of-the-art (SOTA) sentiment analysis model.
+
+\section{Model}
+The DistilBERT model \cite{sanh2019distilbert} is a neural transformer architecture 
+that carries out binary Sentiment Analysis. It achieves 91.3\% accuracy on the 
+Stanford Sentiment Treebank dataset (English) \cite{socher2013recursive}. 
+
+\section{Methods}
+We use the pre-trained version of DistilBERT made available by the Huggiingface project \cite{wolf2019huggingface}. 
+Our test set consists of free responses of individuals to our survey. We only use
+responses in English for this analysis because the DistilBERT model we use was 
+trained and assessed in English. 
+
+Since our test data is not perfectly balanced with responses that a human rated as
+positive or negative, we randomly sample 100 resposes that were rated as positive
+and 100 rated as negative (among all English responses, 190 responses were 
+positive-rated and 121 were negative-rated by a human). We run the analysis with 
+DistilBERT 5 times, randomly samping the test data each time.
+
+\section{Results}
+Compared to the human ratings, DistilBERT performs on average with an accurcy of
+79.2\% with a standard deviation of 1.47\% between runs of the analysis.
+
+\bibliographystyle{abbrv}
+\bibliography{report}
+
+\end{document}
