@@ -11,29 +11,42 @@
 
 \section{Motivation}
 Given the free responses of individuals and the ratings (positive or negative)
-assigned by a human, we want to assess the agreement between human ratings and the 
+assigned by human annotators, we want to assess the agreement between human ratings and the 
 ratings by a state-of-the-art (SOTA) sentiment analysis model.
 
 \section{Model}
-The DistilBERT model \cite{sanh2019distilbert} is a neural transformer architecture 
-that carries out binary Sentiment Analysis. It achieves 91.3\% accuracy on the 
-Stanford Sentiment Treebank dataset (English) \cite{socher2013recursive}. 
+The multilingual BERT model \cite{DBLP:journals/corr/abs-1810-04805} is a neural transformer
+architecture, trained to carry out sentiment analysis on six different languages, including
+English, Spanish and Italian. Given one of our responses, this model can take it as input and assign
+it a discrete probability distribution of size 5, with each of the five values indicating 
+a "very negative", "negative", "neutral", "positive", or "very positive" sentiment.
+
+When allowed to be "off by one" (i.e. predicting for example negative when the ground truth 
+was very negative), this model achieved a sentiment accuracy of 95\% in English, 95\% in Italian, 
+and 95\% in Spanish.
 
 \section{Methods}
-We use the pre-trained version of DistilBERT made available by the Huggiingface project \cite{wolf2019huggingface}. 
-Our test set consists of free responses of individuals to our survey. We only use
-responses in English for this analysis because the DistilBERT model we use was 
-trained and assessed in English. 
+We use the pre-trained version of multilingual BERT for sentiment analysis made available 
+by the Huggiingface project \cite{wolf2019huggingface}. 
+Our test set consists of free responses of individuals to our survey in English, Spanish, 
+and Italian. Each response was labeled as positive or negative by a pair of human annotators. 
+We run the following analysis for each language, separately. 
 
-Since our test data is not perfectly balanced with responses that a human rated as
-positive or negative, we randomly sample 100 resposes that were rated as positive
-and 100 rated as negative (among all English responses, 190 responses were 
-positive-rated and 121 were negative-rated by a human). We run the analysis with 
-DistilBERT 5 times, randomly samping the test data each time.
+Since our test data is not perfectly balanced with responses annotated as positive or negative, 
+we randomly sample 10 resposes from each annotation category. BERT's output assigns each response
+a discrete probability distribution of size 5, with values indicating "very negative", "negative", 
+"neutral", "positive", or "very positive". For each response we calculate two values using BERT's
+output, the first value is the sum of probability values assigned to "very negative" and 
+"negative", and the second one is the sum of probability values assigned to "positive" and 
+"very positive". BERT's rating is determined to be whichever of these two values is largest, 
+and BERT's accuracy is determined by comparing against the ground truth human annotations. 
+We ran this analysis 1000 times for each language, and the average accuracy of BERT is reported 
+for each language. 
 
 \section{Results}
-Compared to the human ratings, DistilBERT performs on average with an accurcy of
-79.2\% with a standard deviation of 1.47\% between runs of the analysis.
+On our test set, BERT had an accuracy of 90.71\% in English, 93.35\% in Spanish, and 92.35\% in 
+Italian. The standard deviation between the 1000 analysis trials was 5.97\% in Enligh, 5.32\% in 
+Spanish, and 5.52\% in Italian. 
 
 \bibliographystyle{abbrv}
 \bibliography{report}
